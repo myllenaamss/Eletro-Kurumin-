@@ -1,0 +1,17 @@
+{
+  "name": "eletro_kurumin",
+  "version": "1.0.0",
+  "description": "Loja Online de Componentes Eletrônicos - Eletro Kurumin",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "node server.js"
+  },
+  "keywords": [
+    "eletro-kurumin",
+    "loja-eletronica",
+    "componentes-eletronicos"
+  ],
+  "author": "Eletro Kurumin",
+  "license": "ISC"
+}

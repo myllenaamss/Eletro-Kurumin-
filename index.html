@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eletro Kurumin | Loja de Componentes Eletrónicos & Hardware</title>
+
+    <!-- Fontes Google (Inter & JetBrains Mono para especificações técnicas) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==================== BARRA DE AVISOS NO TOPO ==================== -->
+    <div class="top-announcement">
+        <div class="container announcement-content">
+            <span>⚡ <strong>Eletro Kurumin:</strong> Envio expresso para todo o país • 5% OFF no PIX com cupom
+                <code>KURUMIN5</code></span>
+            <div class="announcement-links">
+                <a href="#atendimento"><i data-lucide="headphones"></i> Suporte Técnico</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== CABEÇALHO DA LOJA ==================== -->
+    <header class="store-header">
+        <div class="container header-inner">
+
+            <!-- LOGO -->
+            <a href="#" class="brand-logo" onclick="resetFilters()">
+                <div class="logo-badge">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">Eletro Kurumin</span>
+                    <span class="brand-tagline">Componentes & Prototipagem</span>
+                </div>
+            </a>
+
+            <!-- BARRA DE BUSCA CENTRAL -->
+            <div class="search-box">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="text" id="storeSearchInput"
+                    placeholder="Buscar por componente, SKU (ex: ESP32, 1N4007, 10k, DHT22)...">
+                <button class="clear-search-btn" id="btnClearSearch" title="Limpar busca" style="display: none;">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <!-- BOTÃO DO CARRINHO & AÇÕES -->
+            <div class="header-actions">
+                <button class="cart-trigger-btn" id="btnOpenCart" aria-label="Abrir carrinho de compras">
+                    <div class="cart-icon-wrapper">
+                        <i data-lucide="shopping-bag"></i>
+                        <span class="cart-counter-badge" id="cartBadgeCount">0</span>
+                    </div>
+                    <div class="cart-btn-info">
+                        <span class="cart-btn-label">Meu Carrinho</span>
+                        <span class="cart-btn-total" id="cartBadgeTotal">R$ 0,00</span>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- ==================== HERO BANNER ==================== -->
+    <section class="hero-section">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="hero-pill"><i data-lucide="shield-check"></i> Peças Originais & Testadas em Bancada</span>
+                <h1>Componentes Eletrónicos com Pronta Entrega</h1>
+                <p>Do resistor ao microcontrolador. Encontre semicondutores, circuitos integrados, módulos IoT e
+                    sensores para os seus projetos, protótipos e produções.</p>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <i data-lucide="check-circle-2"></i>
+                        <span>Estoque a Pronta Entrega</span>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="file-text"></i>
+                        <span>Datasheets Disponíveis</span>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="truck"></i>
+                        <span>Envio Seguro</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BARRA DE CATEGORIAS RÁPIDAS ==================== -->
+    <nav class="category-nav">
+        <div class="container category-scroll-container">
+            <button class="cat-pill active" data-category="">Todos os Componentes</button>
+            <button class="cat-pill" data-category="Microcontroladores">Microcontroladores & Placas</button>
+            <button class="cat-pill" data-category="Sensores & Módulos">Sensores & Módulos</button>
+            <button class="cat-pill" data-category="Circuitos Integrados">Circuitos Integrados (CIs)</button>
+            <button class="cat-pill" data-category="Semicondutores">Diodos & Transistores</button>
+            <button class="cat-pill" data-category="Resistores">Resistores</button>
+            <button class="cat-pill" data-category="Capacitores">Capacitores</button>
+            <button class="cat-pill" data-category="Eletromecânicos">Relés & Chaves</button>
+            <button class="cat-pill" data-category="Conectores">Conectores & Cabos</button>
+        </div>
+    </nav>
+
+    <!-- ==================== ÁREA PRINCIPAL DA LOJA ==================== -->
+    <main class="store-main container">
+
+        <!-- BARRA DE CONTROLE & FILTROS -->
+        <div class="catalog-header">
+            <div class="catalog-results-info">
+                <h2 id="catalogTitle">Todos os Componentes</h2>
+                <span class="results-count" id="resultsCount">Carregando catálogo...</span>
+            </div>
+
+            <div class="catalog-filters">
+                <div class="filter-group">
+                    <label for="filterAvailability" class="filter-label">Disponibilidade:</label>
+                    <select id="filterAvailability" class="custom-select">
+                        <option value="all">Todos os itens</option>
+                        <option value="in_stock" selected>Apenas com Pronta Entrega</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="sortOrder" class="filter-label">Ordenar por:</label>
+                    <select id="sortOrder" class="custom-select">
+                        <option value="featured">Destaques</option>
+                        <option value="price_asc">Menor Preço</option>
+                        <option value="price_desc">Maior Preço</option>
+                        <option value="name_asc">Nome (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRADE DE PRODUTOS -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Inserido dinamicamente via client.js -->
+        </div>
+
+    </main>
+
+    <!-- ==================== DRAWER LATERAL DO CARRINHO ==================== -->
+    <div class="cart-drawer-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+            <div class="cart-drawer-title">
+                <i data-lucide="shopping-bag"></i>
+                <h3>Seu Carrinho de Compras</h3>
+            </div>
+            <button class="close-drawer-btn" id="btnCloseCart" aria-label="Fechar carrinho">&times;</button>
+        </div>
+
+        <div class="cart-drawer-body" id="cartDrawerBody">
+            <!-- Itens do carrinho renderizados dinamicamente -->
+        </div>
+
+        <div class="cart-drawer-footer" id="cartDrawerFooter">
+            <div class="cart-coupon-box">
+                <input type="text" id="couponInput" placeholder="Cupom de desconto (ex: KURUMIN5)" class="coupon-input">
+                <button class="btn btn-sm btn-outline" id="btnApplyCoupon">Aplicar</button>
+            </div>
+            <div id="couponAppliedMsg" class="coupon-feedback" style="display: none;"></div>
+
+            <div class="cart-summary-lines">
+                <div class="summary-line">
+                    <span>Subtotal</span>
+                    <span class="font-mono" id="cartSubtotalText">R$ 0,00</span>
+                </div>
+                <div class="summary-line discount-line" id="discountRow" style="display: none;">
+                    <span>Desconto Cupom</span>
+                    <span class="font-mono text-emerald" id="cartDiscountText">- R$ 0,00</span>
+                </div>
+                <div class="summary-line">
+                    <span>Frete</span>
+                    <span class="text-emerald font-weight-bold">Grátis para todo o Brasil</span>
+                </div>
+                <div class="summary-line total-line">
+                    <span>Total do Pedido</span>
+                    <span class="font-mono total-amount" id="cartTotalText">R$ 0,00</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-checkout" id="btnProceedCheckout">
+                <i data-lucide="check-circle"></i>
+                <span>Fechar Pedido</span>
+            </button>
+
+            <button class="btn btn-ghost btn-continue" id="btnContinueShopping">
+                Continuar Comprando
+            </button>
+        </div>
+    </aside>
+
+    <!-- ==================== MODAL DE DETALHES TÉCNICOS ==================== -->
+    <div class="modal-backdrop" id="productDetailModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <span class="tag-category" id="modalCategoryTag">Categoria</span>
+                        <h3 id="modalProductName" class="modal-product-title">Nome do Componente</h3>
+                        <span class="modal-sku font-mono" id="modalProductSku">SKU-0000</span>
+                    </div>
+                    <button class="modal-close" id="btnCloseDetailModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="detail-product-layout">
+                        <div class="detail-info-col">
+                            <div class="detail-price-box">
+                                <span class="detail-price-label">Preço Unitário:</span>
+                                <span class="detail-price-value font-mono" id="modalProductPrice">R$ 0,00</span>
+                                <span class="status-pill normal" id="modalProductStockPill">Em Estoque</span>
+                            </div>
+
+                            <div class="detail-specs-table">
+                                <h4>Especificações Técnicas:</h4>
+                                <div class="spec-row">
+                                    <span class="spec-name">Encapsulamento / Package:</span>
+                                    <span class="spec-value font-mono" id="modalProductPackage">-</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-name">Fabricante / Fornecedor:</span>
+                                    <span class="spec-value" id="modalProductSupplier">-</span>
+                                </div>
+                                <div class="spec-row">
+                                    <span class="spec-name">Disponibilidade Imediata:</span>
+                                    <span class="spec-value font-mono" id="modalProductStockQty">0 unidades</span>
+                                </div>
+                            </div>
+
+                            <div class="detail-desc-box">
+                                <h4>Descrição & Aplicação:</h4>
+                                <p id="modalProductDescription">-</p>
+                            </div>
+
+                            <div class="detail-action-row">
+                                <div class="qty-selector">
+                                    <button type="button" class="qty-btn" id="btnModalQtyMinus">-</button>
+                                    <input type="number" id="modalQtyInput" value="1" min="1"
+                                        class="qty-input font-mono">
+                                    <button type="button" class="qty-btn" id="btnModalQtyPlus">+</button>
+                                </div>
+                                <button class="btn btn-primary flex-1" id="btnModalAddToCart">
+                                    <i data-lucide="shopping-cart"></i>
+                                    <span>Adicionar ao Carrinho</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DE CHECKOUT / FINALIZAR PEDIDO ==================== -->
+    <div class="modal-backdrop" id="checkoutModal">
+        <div class="modal-dialog modal-dialog-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <h3>Finalizar Pedido de Compra</h3>
+                        <p class="text-muted text-sm">Preencha seus dados para entrega rápida</p>
+                    </div>
+                    <button class="modal-close" id="btnCloseCheckoutModal">&times;</button>
+                </div>
+
+                <form id="checkoutForm">
+                    <div class="modal-body">
+
+                        <div class="checkout-steps">
+
+                            <!-- DADOS DO CLIENTE -->
+                            <h4 class="form-section-title"><i data-lucide="user"></i> Dados do Comprador</h4>
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="custName">Nome Completo / Razão Social <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="custName" required placeholder="Ex: Roberto Silva"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="custEmail">E-mail para Confirmação <span
+                                            class="required">*</span></label>
+                                    <input type="email" id="custEmail" required placeholder="seuemail@exemplo.com"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="custPhone">WhatsApp / Telefone <span class="required">*</span></label>
+                                    <input type="tel" id="custPhone" required placeholder="(11) 98765-4321"
+                                        class="form-control font-mono">
+                                </div>
+                            </div>
+
+                            <!-- ENDEREÇO DE ENTREGA -->
+                            <h4 class="form-section-title mt-4"><i data-lucide="map-pin"></i> Endereço para Envio</h4>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="custCep">CEP <span class="required">*</span></label>
+                                    <input type="text" id="custCep" required placeholder="00000-000"
+                                        class="form-control font-mono">
+                                </div>
+                                <div class="form-group">
+                                    <label for="custCity">Cidade / UF <span class="required">*</span></label>
+                                    <input type="text" id="custCity" required placeholder="São Paulo / SP"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="custAddress">Logradouro, Número e Bairro <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="custAddress" required
+                                        placeholder="Rua dos Projetos, 123 - Apto 4" class="form-control">
+                                </div>
+                            </div>
+
+                            <!-- FORMA DE PAGAMENTO -->
+                            <h4 class="form-section-title mt-4"><i data-lucide="credit-card"></i> Pagamento</h4>
+                            <div class="payment-options">
+                                <label class="payment-card selected">
+                                    <input type="radio" name="payMethod" value="PIX" checked>
+                                    <div class="payment-card-body">
+                                        <span class="pay-title">⚡ PIX Instantâneo</span>
+                                        <span class="pay-sub text-emerald">Aprovação imediata • Envio no mesmo
+                                            dia</span>
+                                    </div>
+                                </label>
+                                <label class="payment-card">
+                                    <input type="radio" name="payMethod" value="CARD">
+                                    <div class="payment-card-body">
+                                        <span class="pay-title">💳 Cartão de Crédito</span>
+                                        <span class="pay-sub">Em até 12x sem juros</span>
+                                    </div>
+                                </label>
+                                <label class="payment-card">
+                                    <input type="radio" name="payMethod" value="BOLETO">
+                                    <div class="payment-card-body">
+                                        <span class="pay-title">📄 Boleto Bancário</span>
+                                        <span class="pay-sub">Compensação em até 1 dia útil</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- RESUMO DO TOTAL NO CHECKOUT -->
+                            <div class="checkout-total-banner mt-4">
+                                <span>Valor Final a Pagar:</span>
+                                <strong class="font-mono text-emerald" id="checkoutFinalAmount">R$ 0,00</strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline" id="btnCancelCheckout">Voltar ao Carrinho</button>
+                        <button type="submit" class="btn btn-primary" id="btnConfirmOrder">
+                            <i data-lucide="shield-check"></i>
+                            <span>Confirmar & Finalizar Pedido</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DE PEDIDO CONCLUÍDO ==================== -->
+    <div class="modal-backdrop" id="orderSuccessModal">
+        <div class="modal-dialog modal-dialog-sm">
+            <div class="modal-content text-center">
+                <div class="modal-body" style="padding: 36px 28px;">
+                    <div class="success-icon-badge">
+                        <i data-lucide="check-circle" style="width: 48px; height: 48px; color: var(--success);"></i>
+                    </div>
+                    <h2 style="margin-top: 16px; font-size: 1.4rem;">Pedido Realizado com Sucesso!</h2>
+                    <p class="text-muted" style="margin-top: 6px; font-size: 0.9rem;">
+                        Obrigado por comprar na <strong>Eletro Kurumin</strong>.
+                    </p>
+
+                    <div class="order-number-box font-mono" id="successOrderNumber">
+                        PEDIDO #EK-000000
+                    </div>
+
+                    <div class="pix-payment-box" id="pixPaymentBox">
+                        <p style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px;">Chave PIX Copia e Cola
+                            (Simulada):</p>
+                        <div class="copy-pix-field">
+                            <input type="text" readonly value="pix@eletrokurumin.com.br" id="pixKeyField"
+                                class="form-control font-mono text-center">
+                            <button type="button" class="btn btn-sm btn-outline" onclick="copyPixKey()">Copiar</button>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-muted" style="margin-top: 16px;">
+                        Enviamos os detalhes da compra e código de rastreamento para o seu e-mail e WhatsApp cadastrado.
+                    </p>
+
+                    <button class="btn btn-primary mt-4" style="width: 100%;" onclick="closeOrderSuccessModal()">
+                        Concluir & Voltar à Loja
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== RODAPÉ DA LOJA ==================== -->
+    <footer class="store-footer" id="atendimento">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <div class="brand-logo footer-logo">
+                    <div class="logo-badge">
+                        <i data-lucide="cpu"></i>
+                    </div>
+                    <span class="brand-title">Eletro Kurumin</span>
+                </div>
+                <p class="footer-desc">
+                    Sua loja de referência em semicondutores, circuitos integrados, microcontroladores e módulos para
+                    prototipagem de engenharia e projetos eletrónicos.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Canais de Atendimento</h4>
+                <ul class="footer-links">
+                    <li><i data-lucide="mail"></i> contato@eletrokurumin.com.br</li>
+                    <li><i data-lucide="phone"></i> (11) 3456-7890</li>
+                    <li><i data-lucide="map-pin"></i> Almoxarifado Central Kurumin - SP</li>
+                    <li><i data-lucide="clock"></i> Seg a Sex: 08h00 às 18h00</li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Segurança & Pagamentos</h4>
+                <div class="payment-badges">
+                    <span class="pay-badge">⚡ PIX</span>
+                    <span class="pay-badge">💳 Visa</span>
+                    <span class="pay-badge">💳 Mastercard</span>
+                    <span class="pay-badge">📄 Boleto</span>
+                </div>
+                <p class="footer-security">
+                    <i data-lucide="shield-check"></i> Ambiente 100% Seguro com Certificado SSL
+                </p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container footer-bottom-inner">
+                <p>&copy; 2026 Eletro Kurumin Ltda. CNPJ: 12.345.678/0001-90. Todos os direitos reservados.</p>
+                <span class="text-muted text-sm">Preços e estoques sujeitos a alteração sem aviso prévio.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICAÇÕES TOAST -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- SCRIPT CLIENTE -->
+    <script src="client.js"></script>
+</body>
+
+</html>
